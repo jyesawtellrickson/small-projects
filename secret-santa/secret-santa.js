@@ -85,7 +85,7 @@ function shuffle(array) {
  *
  * @returns {Boolean} True if mail sent successfully.
  */
-/*function sendEmail(user) {
+function sendEmail(user) {
   // Sends email to a specific user.
   try {
     window.open('mailto:' & user.target_email &
@@ -94,7 +94,7 @@ function shuffle(array) {
   } catch {
     throwError('Failed to send email to ' & user.target_email);
   }
-}*/
+}
 
 
 /**
@@ -112,21 +112,27 @@ function allocate(users){
   users = shuffle(users);
   users.forEach(function(user, ix) {
     console.log(user, ix);
-    user.target_name = users[(ix - 1) % users.length].name
-    user.target_email = users[(ix - 1) % users.length].email
+    user.target_name = users[(ix + 1) % users.length].name
+    user.target_email = users[(ix + 1) % users.length].email
   });
   console.log(users);
   return users
 }
 
-
+/**
+ * @summary Adds another group of inputs to the HTML form.
+ *
+ * @param {Number} num The number of the element on the form.
+ */
 function addInput(num=1) {
   num = String($('#add-fields').val());
   $('#add-fields').before(
-    "Name " + num + ":<br>" +
-    "<input type='text' class='name-input' name='name'><br>" +
-    "Email " + num + ":<br>" +
-    "<input type='text' class='email-input' name='email'><br>"
+    "<div class='form-group'>" +
+    "<label for='name-" + num + "'>Name " + num + ":</label>" +
+    "<input type='text' class='name-input form-control' name='name'>" +
+    "<label for='email-" + num + "'>Email " + num + ":</label>" +
+    "<input type='text' class='email-input form-control' name='email'>" +
+    "</div>"
   );
   $('#add-fields').attr('value', Number(num)+1);
 }
@@ -136,10 +142,7 @@ function runSecretSanta() {
   let users = readUsers();
   users = allocate(users);
   console.log(users);
+  users.foreEach(sendEmail);
 }
-
-
-
-
 
 var users = undefined;
